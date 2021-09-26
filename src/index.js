@@ -76,6 +76,17 @@ app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
 
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
   // Complete aqui
+  const {username} = request.headers
+  const {id} = request.params
+  const user = users.find(user => user.username === username)
+  let todo = user.todos.find(todo => todo.id === id)
+  todo = {...todo, done:true}
+
+  //Encontra o indice da tarefa, remove a tarefa antiga e adiciona a atual.
+  let index  = user.todos.findIndex(todo=> todo.id === id)
+  user.todos.splice(index,1, todo)
+
+  return response.json(todo)
 });
 
 app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
