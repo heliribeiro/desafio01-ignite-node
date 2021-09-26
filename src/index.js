@@ -91,6 +91,16 @@ app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
 
 app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
   // Complete aqui
+  const {username} = request.headers
+  const {id} = request.params
+  const user = users.find(user => user.username === username)
+
+  //Encontra o indice da tarefa e remove a tarefa.
+  let index  = user.todos.findIndex(todo=> todo.id === id)
+  user.todos.splice(index,1)
+
+  return response.send(200)
+
 });
 
 module.exports = app;
